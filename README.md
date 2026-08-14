@@ -7,78 +7,107 @@
   <img src="https://img.shields.io/badge/Engine-FastAPI-009688?style=for-the-badge" alt="FastAPI">
 </p>
 
-> **No es un chatbot complaciente. Son dos inteligencias artificiales compartiendo una misma mente, debatiendo entre ellas y hablándote en tiempo real, 100% offline.**
+> **Not your average compliant chatbot. Bina is an experiment in Multi-Agent Architecture where two distinct AIs share a single virtual body, debate with each other, and talk to you in real-time, 100% offline.**
 
-*( Inserta tu GIF de demostración animado aquí )*
+*( Pega tu video/GIF aquí )*
+*(Note: The demo above is in Spanish, but Bina's logic supports any language your LLM handles).*
+
+## 🎭 What is Bina?
+
+Bina is a lightweight, privacy-first AI companion designed to run locally on your own hardware. Through a hypnotic, minimalist web interface, you interact via voice with two simultaneous entities:
+
+- **Lia (Left Eye):** Empathetic, dreamer, warm, and creative. She focuses on the human element and "how we can help."
+- **Nox (Right Eye):** Cold, calculating, hyper-logical, and sarcastic. He identifies risks and actively destroys blind optimism.
+
+Instead of giving you a robotic, single-turn answer, **Lia and Nox debate each other before giving you a conclusion.** They listen to your voice in real-time, process logic using structured outputs, and reply with high-quality synthesized voices while their eyes dynamically react on screen.
+
+---
+
+## 🏗️ Privacy-First Architecture
+
+Bina was built with one philosophy: **your data never leaves your house.** No third-party APIs, no token fees, no cloud storage. The entire stack runs on your machine:
+
+1. **Speech-to-Text (STT):** `Faster-Whisper` transcribes your voice locally.
+2. **Brain (LLM):** `Ollama` running `llama3.1:8b` (recommended) with **Structured Outputs (Pydantic)**.
+3. **Vector Memory:** `ChromaDB` (`nomic-embed-text`) for long-term context (WIP).
+4. **Text-to-Speech (TTS):** `Piper` generates Lia and Nox's voices in milliseconds using hyper-optimized `.onnx` models.
+5. **Backend:** `FastAPI` + WebSockets.
+6. **Frontend:** Vanilla JS / CSS (Organic animations, 100dvh mobile-responsive design).
+
+---
+
+## 🚀 2-Minute Setup (Linux / Ubuntu Server)
+
+Assuming you have [Ollama installed](https://ollama.com/), firing up Bina is absurdly simple:
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/tranzge/Bina.git
+cd Bina
+
+# 2. Run the magic installer
+bash install_bina.sh
+```
+
+The script will handle virtual environments, install dependencies (`fastapi`, `faster-whisper`, `piper-tts`), automatically download the Spanish Piper voice models, and boot the server at `http://your-ip:8000`.
+
+---
+
+## ⚙️ Modding & Customization (Play God)
+
+Bored of the original personalities? Want Bina to speak like a Jedi Master and a Sith Lord?
+
+Bina is designed to be ultra-customizable. Just edit `src/config.py`:
+
+```python
+# src/config.py
+ACTIVE_PRESET = "jedi_sith" # Change this to rotate personalities
+```
+
+### Included Presets:
+1. `duo_original`: Lia (Empathetic) vs Nox (Logical).
+2. `jedi_sith`: Wisdom of the Light vs Power of the Dark Side.
+3. `creyente_esceptico`: Paranormal Believer vs Strict Skeptical Scientist.
+
+You can also change the Piper voice paths and your Ollama host address directly from the config file.
+
+---
+
+## 📱 Mobile Usage
+
+1. Open your browser (Safari / Chrome) and go to `http://YOUR_SERVER_IP:8000`.
+2. Since browsers block microphone access on non-HTTPS sites, you **must** enable this dev flag if you are not using SSL:
+   - Go to: `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
+   - Add your IP (`http://192.168.x.x:8000`), set to **Enabled**, and relaunch.
+3. Tap the bottom button and start talking!
+
+---
+
+*(Versión en Español abajo / Spanish version below)*
+
+---
+
+# 👁️ Bina: IA Local de Doble Personalidad
+
+> **No es un chatbot complaciente. Son dos inteligencias artificiales compartiendo una misma mente, debatiendo entre ellas y hablándote en tiempo real, 100% offline.**
 
 ## 🎭 ¿Qué es Bina?
 
-Bina es un experimento de Arquitectura de Múltiples Agentes (Multi-Agent Architecture) diseñado para correr localmente en tu propio hardware. A través de una interfaz web minimalista e hipnótica, interactúas por voz con dos entidades simultáneas:
+Bina es un experimento de Arquitectura de Múltiples Agentes diseñado para correr localmente. Interactúas por voz con dos entidades simultáneas:
 
 - **Lia (Ojo Izquierdo):** Empática, soñadora, cálida y creativa. Piensa en el "cómo podemos ayudar".
 - **Nox (Ojo Derecho):** Frío, calculador, hiper-lógico y sarcástico. Identifica riesgos y destruye el optimismo ciego.
 
-En lugar de darte una respuesta robótica, **Lia y Nox debaten entre ellos antes de darte una conclusión.** Escuchan tu voz en tiempo real, procesan la lógica y te responden con voces sintetizadas de alta calidad, mientras ves sus expresiones cambiar dinámicamente en pantalla.
-
----
+En lugar de darte una respuesta robótica, **Lia y Nox debaten entre ellos antes de darte una conclusión.**
 
 ## 🏗️ Arquitectura "Privacy-First"
 
-Bina está construida con la filosofía de que **tus datos no deben salir de tu casa**. No se conecta a APIs de terceros, no cobra por token y no almacena tu información en la nube. Todo el stack tecnológico corre en tu hardware:
-
-1. **Voz a Texto (STT):** `Faster-Whisper` transcribe tu voz localmente evadiendo ruidos de fondo.
-2. **Cerebro (LLM):** `Ollama` ejecutando (recomendado) `llama3.1:8b` o `qwen2.5:14b` usando **Salidas Estructuradas (Pydantic)**.
-3. **Memoria Vectorial:** `ChromaDB` (con `nomic-embed-text`) guarda contexto a largo plazo.
-4. **Texto a Voz (TTS):** `Piper` genera las voces de Lia y Nox en milisegundos con modelos `.onnx` hiper optimizados.
+Tus datos no salen de tu casa. Todo corre en tu hardware:
+1. **STT:** `Faster-Whisper` transcribe tu voz localmente.
+2. **LLM:** `Ollama` ejecutando `llama3.1:8b` usando **Salidas Estructuradas (Pydantic)**.
+3. **Memoria:** `ChromaDB` guarda contexto a largo plazo.
+4. **TTS:** `Piper` genera las voces en milisegundos.
 5. **Orquestador:** `FastAPI` + WebSockets.
-6. **Frontend:** Vanilla JS / CSS (Animaciones orgánicas, diseño 100dvh responsivo para móviles).
+6. **Frontend:** Vanilla JS / CSS.
 
----
-
-## 🚀 Instalación en 2 Minutos (Linux / Ubuntu Server)
-
-Si ya tienes [Ollama instalado](https://ollama.com/), levantar a Bina es absurdamente fácil:
-
-```bash
-# 1. Clona este repositorio
-git clone https://github.com/tu-usuario/Bina.git
-cd Bina
-
-# 2. Ejecuta el instalador mágico
-bash install_bina.sh
-```
-
-El script se encargará de crear el entorno virtual, instalar dependencias (`fastapi`, `faster-whisper`, `piper-tts`), descargar automáticamente los modelos de voz en español y levantar el servicio en `http://tu-ip:8000`.
-
----
-
-## ⚙️ Modding y Personalización (¡Juega a ser Dios!)
-
-¿Te aburriste de la personalidad original? ¿Quieres que Bina hable como un Maestro Jedi y un Lord Sith? 
-
-Bina está diseñada para ser ultra-personalizable. Solo abre el archivo `src/config.py`:
-
-```python
-# src/config.py
-ACTIVE_PRESET = "jedi_sith" # Cambia esto para rotar personalidades
-```
-
-### Presets Incluidos de Fábrica:
-1. `duo_original`: Lia (Empática) vs Nox (Lógico).
-2. `jedi_sith`: Sabiduría de la Luz vs Poder del Lado Oscuro.
-3. `creyente_esceptico`: Conspiraciones Paranormales vs Método Científico Estricto.
-
-También puedes cambiar los modelos de voz de Piper y la dirección de tu servidor de Ollama directamente desde este mismo archivo de configuración.
-
----
-
-## 📱 ¿Cómo usarlo desde el celular?
-
-1. Abre tu navegador (Safari / Chrome) y entra a `http://IP_DE_TU_SERVIDOR:8000`.
-2. Como los navegadores bloquean el micrófono en sitios sin `https://`, **es vital** habilitar este flag de desarrollador en tu celular si no usas SSL:
-   - Ve a: `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
-   - Agrega tu IP (`http://192.168.x.x:8000`), marca **Enabled** y reinicia el navegador.
-3. ¡Presiona el botón inferior y empieza a hablar!
-
----
-> Creado con ❤️ por Tranzge. Si este proyecto te voló la cabeza, ¡déjale una estrellita ⭐ en GitHub!
+> Creado con ❤️ por Tranzge. Si este proyecto te voló la cabeza, ¡déjale una estrellita ⭐!
