@@ -1,0 +1,17 @@
+# Entornos virtuales
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Modelos pesados
+models/
+*.onnx
+*.onnx.json
+
+# Archivos temporales y de prueba
+*.wav
+*.mp3
+*.tar.gz
+test*.py
+bina_github_release_v2/

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>BINA - Prototipo Visual (Par de Ojos)</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bina-container">
+        <!-- LIA (Izquierda) -->
+        <div class="persona lia" id="lia-container">
+            <div class="eyes-wrapper">
+                <div class="eye-system" id="lia-eyes">
+                    <div class="eye-box left-eye">
+                        <div class="eyelid top-lid"></div>
+                        <div class="eye-ball"></div>
+                        <div class="eyelid bottom-lid"></div>
+                    </div>
+                    <div class="eye-box right-eye">
+                        <div class="eyelid top-lid"></div>
+                        <div class="eye-ball"></div>
+                        <div class="eyelid bottom-lid"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="name-tag">LIA (Creativa / Empática)</div>
+        </div>
+
+        <!-- NOX (Derecha) -->
+        <div class="persona nox" id="nox-container">
+            <div class="eyes-wrapper">
+                <div class="eye-system" id="nox-eyes">
+                    <div class="eye-box left-eye">
+                        <div class="eyelid top-lid"></div>
+                        <div class="eye-ball"></div>
+                        <div class="eyelid bottom-lid"></div>
+                    </div>
+                    <div class="eye-box right-eye">
+                        <div class="eyelid top-lid"></div>
+                        <div class="eye-ball"></div>
+                        <div class="eyelid bottom-lid"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="name-tag">NOX (Analítico / Práctico)</div>
+        </div>
+    </div>
+
+    <!-- Interfaz de Control e Interacción -->
+    <div class="interaction-panel">
+        <div id="chat-history" class="chat-history">
+            <!-- Los mensajes se inyectan aquí vía JS -->
+            <div class="chat-msg msg-system">Bina Core Conectado. Mantén presionado el botón para hablar.</div>
+        </div>
+        <button id="mic-btn" class="mic-btn">🎙️ Mantener presionado para hablar</button>
+    </div>
+
+    <!-- Panel de simulación avanzado para depuración -->
+    <div class="debug-panel" style="display: none;">
+        <h4>Modo Depuración (Prueba botones manuales)</h4>
+        <div class="button-group">
+            <label>Acciones:</label>
+            <button onclick="setGlobalState('idle')">Idle</button>
+            <button onclick="setGlobalState('listening')">Escuchando</button>
+            <button onclick="setGlobalState('thinking')">Pensando</button>
+            <button onclick="setGlobalState('speaking_lia')">Habla Lia</button>
+            <button onclick="setGlobalState('speaking_nox')">Habla Nox</button>
+        </div>
+        <div class="button-group" style="margin-top: 10px; border-top: 1px solid #444; padding-top: 10px;">
+            <label>Emociones (Lia):</label>
+            <button onclick="setEmotion('lia', 'neutral')">Neutral</button>
+            <button onclick="setEmotion('lia', 'feliz')">Alegre</button>
+            <button onclick="setEmotion('lia', 'enojada')">Enojada</button>
+            <button onclick="setEmotion('lia', 'triste')">Triste</button>
+            <button onclick="setEmotion('lia', 'sorpresa')">Sorpresa</button>
+        </div>
+        <div class="button-group" style="margin-top: 10px;">
+            <label>Emociones (Nox):</label>
+            <button onclick="setEmotion('nox', 'neutral')">Neutral</button>
+            <button onclick="setEmotion('nox', 'satisfecho')">Satisfecho</button>
+            <button onclick="setEmotion('nox', 'crítico')">Crítico</button>
+            <button onclick="setEmotion('nox', 'decepcionado')">Decepcionado</button>
+            <button onclick="setEmotion('nox', 'sorpresa')">Sorpresa</button>
+        </div>
+    </div>
+
+    <script src="app.js?v=3"></script>
+</body>
+</html>

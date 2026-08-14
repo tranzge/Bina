@@ -1,0 +1,380 @@
+:root {
+    --bg-color: #050505;
+    
+    --lia-color: #ff8c42;
+    --lia-glow: rgba(255, 140, 66, 0.4);
+    
+    --nox-color: #00e5ff;
+    --nox-glow: rgba(0, 229, 255, 0.4);
+    
+    --eye-width: 100px; /* Tamaño de un solo ojo */
+    --eye-height: 120px;
+    --eye-gap: 40px; /* Espacio entre los dos ojos */
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
+}
+
+.bina-container {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 50dvh;
+    align-items: flex-end;
+    padding-bottom: 20px;
+}
+
+.persona {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: background 0.8s ease;
+}
+
+.lia { background: radial-gradient(circle at center, #1a0f0a 0%, var(--bg-color) 70%); }
+.nox { background: radial-gradient(circle at center, #051417 0%, var(--bg-color) 70%); }
+
+.name-tag {
+    position: absolute;
+    bottom: 30px;
+    font-size: 0.9rem;
+    letter-spacing: 3px;
+    opacity: 0.4;
+    text-transform: uppercase;
+}
+
+.lia .name-tag { color: var(--lia-color); }
+.nox .name-tag { color: var(--nox-color); }
+
+/* Contenedor principal para mover ambos ojos a la vez (mirar a los lados) */
+.eyes-wrapper {
+    transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* El sistema de 2 ojos */
+.eye-system {
+    display: flex;
+    gap: var(--eye-gap);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.eye-box {
+    position: relative;
+    width: var(--eye-width);
+    height: var(--eye-height);
+    overflow: hidden;
+    background-color: transparent;
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Formas de los ojos según el personaje */
+.lia .eye-box { border-radius: 50%; }
+.nox .eye-box { border-radius: 20%; }
+
+/* El globo ocular iluminado (sin pupilas) */
+.eye-ball {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+    transition: transform 0.4s ease, background-color 0.5s ease;
+}
+
+.lia .eye-ball {
+    background-color: var(--lia-color);
+    box-shadow: 0 0 40px var(--lia-glow), inset 0 0 20px rgba(0,0,0,0.4);
+}
+
+.nox .eye-ball {
+    background-color: var(--nox-color);
+    box-shadow: 0 0 40px var(--nox-glow), inset 0 0 20px rgba(0,0,0,0.4);
+}
+
+/* Párpados */
+.eyelid {
+    position: absolute;
+    width: 150%;
+    height: 100%;
+    background-color: var(--bg-color);
+    box-shadow: 0 0 0 2px var(--bg-color); /* Fix: asfixia bordes fantasma */
+    z-index: 10;
+    left: -25%;
+    will-change: transform; /* Fix WebKit: fuerza capa de composición superior */
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.top-lid { top: -100%; transform-origin: bottom center; }
+.bottom-lid { bottom: -100%; transform-origin: top center; }
+
+
+/* =========================================
+   EMOCIONES (Controladas vía JS)
+   ========================================= */
+
+/* Neutral */
+.emotion-neutral .top-lid { transform: translateY(0) rotate(0deg); }
+.emotion-neutral .bottom-lid { transform: translateY(0) rotate(0deg); }
+
+/* Alegre (Sonrisa) */
+.emotion-happy .top-lid { transform: translateY(15%) rotate(0deg); }
+.emotion-happy .bottom-lid { transform: translateY(-35%) rotate(0deg); }
+.emotion-happy .eye-box { transform: scaleY(0.9); }
+
+/* Enojado / Crítico (Ceño fruncido) */
+/* Ojo izquierdo frunce hacia adentro, derecho hacia adentro */
+.emotion-angry .left-eye .top-lid { transform: translateY(40%) rotate(15deg); }
+.emotion-angry .right-eye .top-lid { transform: translateY(40%) rotate(-15deg); }
+.emotion-angry .bottom-lid { transform: translateY(-5%) rotate(0deg); }
+
+/* Triste / Dudoso */
+.emotion-sad .left-eye .top-lid { transform: translateY(30%) rotate(-15deg); }
+.emotion-sad .right-eye .top-lid { transform: translateY(30%) rotate(15deg); }
+.emotion-sad .bottom-lid { transform: translateY(-15%); }
+
+/* Sorpresa / Curiosidad (Ojos bien abiertos) */
+.emotion-surprise .top-lid { transform: translateY(-30%) rotate(0deg); }
+.emotion-surprise .bottom-lid { transform: translateY(30%) rotate(0deg); }
+.emotion-surprise .eye-ball { transform: scale(0.85); }
+
+
+/* =========================================
+   ESTADOS GLOBALES (Acciones)
+   ========================================= */
+
+/* Idle */
+.state-idle .eye-system {
+    animation: float 6s infinite ease-in-out;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Animación al hablar */
+.state-speaking_lia .lia .eye-ball,
+.state-speaking_nox .nox .eye-ball {
+    animation: speakPulse 0.3s infinite alternate;
+}
+
+@keyframes speakPulse {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.08); }
+}
+
+/* Listening (Atento, mirada enfocada) */
+.state-listening .eye-system { transform: scale(1.1); }
+.state-listening .lia .eye-ball { box-shadow: 0 0 60px var(--lia-glow); }
+.state-listening .nox .eye-ball { box-shadow: 0 0 60px var(--nox-glow); }
+
+/* Thinking (Mirando arriba/lado moviendo todo el bloque y latiendo) */
+.state-thinking .eyes-wrapper { transform: translate(15px, -20px); }
+.state-thinking .top-lid { transform: translateY(20%); } 
+
+.state-thinking .lia .eye-ball { animation: thinkPulseLia 2s infinite alternate; }
+.state-thinking .nox .eye-ball { animation: thinkPulseNox 2s infinite alternate; }
+
+@keyframes thinkPulseLia {
+    0% { box-shadow: 0 0 20px var(--lia-glow), inset 0 0 20px rgba(0,0,0,0.4); }
+    100% { box-shadow: 0 0 60px var(--lia-color), inset 0 0 20px rgba(0,0,0,0.4); }
+}
+@keyframes thinkPulseNox {
+    0% { box-shadow: 0 0 20px var(--nox-glow), inset 0 0 20px rgba(0,0,0,0.4); }
+    100% { box-shadow: 0 0 60px var(--nox-color), inset 0 0 20px rgba(0,0,0,0.4); }
+}
+
+/* Speaking (Rebote vertical suave por personaje) */
+.state-speaking_lia .lia .eye-system { animation: speak-bounce 0.3s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); }
+.state-speaking_nox .nox .eye-system { animation: speak-bounce 0.3s infinite alternate cubic-bezier(0.4, 0, 0.2, 1); }
+
+/* Opacar al que no habla para dar foco visual */
+.state-speaking_lia .nox { opacity: 0.3; }
+.state-speaking_nox .lia { opacity: 0.3; }
+
+@keyframes speak-bounce {
+    0% { transform: scaleY(1) translateY(0); }
+    100% { transform: scaleY(1.05) translateY(-5px); }
+}
+
+/* =========================================
+   Panel de Debug
+   ========================================= */
+.debug-panel {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(20, 20, 20, 0.9);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #333;
+    z-index: 100;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+.debug-panel h4 { margin-bottom: 15px; color: #aaa; text-align: center; }
+.button-group { display: flex; gap: 8px; align-items: center; justify-content: center; }
+.button-group label { color: #888; font-size: 0.8rem; width: 100px; text-align: right; }
+button {
+    background: #2a2a2a; color: white; border: 1px solid #444; padding: 6px 12px;
+    border-radius: 6px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s;
+}
+button:hover { background: #444; border-color: #666; }
+
+/* Panel de Interacción (Historial de Chat) */
+.interaction-panel {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 600px;
+    height: 50dvh;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    gap: 15px;
+    z-index: 50;
+    background: linear-gradient(to top, rgba(0,0,0,0.9) 20%, transparent);
+}
+
+.chat-history {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #555 transparent;
+}
+
+.chat-history::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-history::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.chat-msg {
+    padding: 12px 16px;
+    border-radius: 18px;
+    max-width: 85%;
+    font-size: 1rem;
+    line-height: 1.4;
+    animation: slideIn 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.msg-system {
+    align-self: center;
+    background: transparent;
+    color: #666;
+    font-size: 0.85rem;
+    font-style: italic;
+    border: none;
+    animation: none;
+}
+
+.msg-user {
+    align-self: flex-end;
+    background: #333;
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.msg-lia {
+    align-self: flex-start;
+    background: rgba(255, 140, 66, 0.15);
+    border: 1px solid rgba(255, 140, 66, 0.3);
+    color: #ffd6b3;
+    border-bottom-left-radius: 4px;
+}
+
+.msg-nox {
+    align-self: flex-start;
+    background: rgba(0, 229, 255, 0.15);
+    border: 1px solid rgba(0, 229, 255, 0.3);
+    color: #b3f7ff;
+    border-bottom-left-radius: 4px;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.mic-btn {
+    align-self: center;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 30px;
+    padding: 15px 30px;
+    font-size: 1.1rem;
+    color: white;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    margin-bottom: 10px;
+}
+
+.mic-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.6);
+    background: linear-gradient(135deg, #34495e, #3d566e);
+}
+
+.mic-btn:active, .mic-btn.recording {
+    transform: scale(0.95);
+    background: linear-gradient(135deg, #c0392b, #e74c3c);
+    box-shadow: 0 0 25px rgba(231, 76, 60, 0.6);
+    border-color: #e74c3c;
+}
+
+/* =========================================
+   MEDIA QUERIES (Mobile)
+   ========================================= */
+@media (max-width: 768px) {
+    :root {
+        --eye-width: 60px;
+        --eye-height: 80px;
+        --eye-gap: 25px;
+    }
+    
+    .bina-container {
+        height: 45dvh;
+        align-items: center; /* En móviles los centramos más */
+        padding-bottom: 0;
+    }
+    
+    .name-tag { 
+        display: none; /* Ocultamos los nombres para ahorrar espacio */
+    }
+    
+    .interaction-panel {
+        height: 55dvh; /* Más espacio al chat en móvil */
+        padding: 10px;
+    }
+    
+    .mic-btn {
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+}
