@@ -7,14 +7,14 @@
   <img src="https://img.shields.io/badge/Engine-FastAPI-009688?style=for-the-badge" alt="FastAPI">
 </p>
 
-> **Not your average compliant chatbot. Bina is an experiment in Multi-Agent Architecture where two distinct AIs share a single virtual body, debate with each other, and talk to you in real-time, 100% offline.**
+> **Not your average compliant chatbot. Bina is an experiment in Multi-Agent Architecture where two distinct AIs share a single virtual body, debate with each other, and talk to you in real-time. No physical displays or expensive hardware needed—just your phone and a home server.**
 
 *( Pega tu video/GIF aquí )*
 *(Note: The demo above is in Spanish, but Bina's logic supports any language your LLM handles).*
 
 ## 🎭 What is Bina?
 
-Bina is a lightweight, privacy-first AI companion designed to run locally on your own hardware. Through a hypnotic, minimalist web interface, you interact via voice with two simultaneous entities:
+Bina is a lightweight, privacy-first AI companion designed to run locally on your own hardware, but accessible **anywhere from your smartphone**. Through a hypnotic, minimalist web interface, you interact via voice with two simultaneous entities:
 
 - **Lia (Left Eye):** Empathetic, dreamer, warm, and creative. She focuses on the human element and "how we can help."
 - **Nox (Right Eye):** Cold, calculating, hyper-logical, and sarcastic. He identifies risks and actively destroys blind optimism.
@@ -49,13 +49,25 @@ cd Bina
 bash install_bina.sh
 ```
 
-The script will handle virtual environments, install dependencies (`fastapi`, `faster-whisper`, `piper-tts`), automatically download the Spanish Piper voice models, and boot the server at `http://your-ip:8000`.
+The script will handle virtual environments, install dependencies, download the Spanish Piper voice models, and boot the server at `http://your-ip:8000`.
+
+---
+
+## 📱 Mobile & Remote Access (The Magic Trick)
+
+Bina is designed to live in your pocket without draining your phone's battery. All the heavy lifting (LLM, TTS, STT) happens on your home server. 
+
+To use Bina securely from anywhere in the world:
+1. Install [Tailscale](https://tailscale.com/) on both your Home Server and your Smartphone.
+2. Open your phone's browser (Safari/Chrome) and go to your server's Tailscale IP: `http://YOUR_TAILSCALE_IP:8000`.
+3. **Crucial Step (Microphone Permissions):** Since mobile browsers block microphone access on non-HTTPS sites, you must enable this dev flag to allow Tailscale IPs:
+   - Go to `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
+   - Add your Tailscale IP (`http://100.x.x.x:8000`), set to **Enabled**, and relaunch.
+4. Tap the screen and start talking!
 
 ---
 
 ## ⚙️ Modding & Customization (Play God)
-
-Bored of the original personalities? Want Bina to speak like a Jedi Master and a Sith Lord?
 
 Bina is designed to be ultra-customizable. Just edit `src/config.py`:
 
@@ -69,17 +81,15 @@ ACTIVE_PRESET = "jedi_sith" # Change this to rotate personalities
 2. `jedi_sith`: Wisdom of the Light vs Power of the Dark Side.
 3. `creyente_esceptico`: Paranormal Believer vs Strict Skeptical Scientist.
 
-You can also change the Piper voice paths and your Ollama host address directly from the config file.
-
 ---
 
-## 📱 Mobile Usage
+## 🤖 Acknowledgments
 
-1. Open your browser (Safari / Chrome) and go to `http://YOUR_SERVER_IP:8000`.
-2. Since browsers block microphone access on non-HTTPS sites, you **must** enable this dev flag if you are not using SSL:
-   - Go to: `chrome://flags/#unsafely-treat-insecure-origin-as-secure`
-   - Add your IP (`http://192.168.x.x:8000`), set to **Enabled**, and relaunch.
-3. Tap the bottom button and start talking!
+This project is the result of a massive collaboration between human creativity and Artificial Intelligence. The architecture, logic, and code were heavily co-developed by Tranzge alongside **Google Antigravity, ChatGPT, Gemini, and Claude**. 
+
+If you ask me how a specific WebSocket buffer or Piper TTS threading works under the hood... I'll probably ask my AI team! We are entering an era where you don't need to be a senior developer to build complex, multi-agent architectures—you just need the right vision and the right AI companions.
+
+> Built with ❤️ by Tranzge & The AIs. If this project blew your mind, drop a ⭐!
 
 ---
 
@@ -89,25 +99,21 @@ You can also change the Piper voice paths and your Ollama host address directly 
 
 # 👁️ Bina: IA Local de Doble Personalidad
 
-> **No es un chatbot complaciente. Son dos inteligencias artificiales compartiendo una misma mente, debatiendo entre ellas y hablándote en tiempo real, 100% offline.**
+> **No es un chatbot complaciente. Son dos inteligencias artificiales compartiendo una misma mente. No necesitas pantallas físicas caras; la llevas en tu celular mientras tu servidor hace el trabajo pesado en casa.**
 
 ## 🎭 ¿Qué es Bina?
 
 Bina es un experimento de Arquitectura de Múltiples Agentes diseñado para correr localmente. Interactúas por voz con dos entidades simultáneas:
 
-- **Lia (Ojo Izquierdo):** Empática, soñadora, cálida y creativa. Piensa en el "cómo podemos ayudar".
-- **Nox (Ojo Derecho):** Frío, calculador, hiper-lógico y sarcástico. Identifica riesgos y destruye el optimismo ciego.
+- **Lia (Ojo Izquierdo):** Empática, cálida y creativa. Piensa en el "cómo podemos ayudar".
+- **Nox (Ojo Derecho):** Frío, calculador y sarcástico. Identifica riesgos y destruye el optimismo ciego.
 
 En lugar de darte una respuesta robótica, **Lia y Nox debaten entre ellos antes de darte una conclusión.**
 
-## 🏗️ Arquitectura "Privacy-First"
+## 🌍 Llévala en tu bolsillo con Tailscale
+Instala **Tailscale** en tu servidor y en tu celular. Accede a la IP de Tailscale desde Chrome/Safari en tu móvil (`http://100.x.x.x:8000`) y tendrás a Bina contigo en cualquier parte del mundo. (No olvides habilitar el flag `unsafely-treat-insecure-origin` en Chrome para que funcione el micrófono).
 
-Tus datos no salen de tu casa. Todo corre en tu hardware:
-1. **STT:** `Faster-Whisper` transcribe tu voz localmente.
-2. **LLM:** `Ollama` ejecutando `llama3.1:8b` usando **Salidas Estructuradas (Pydantic)**.
-3. **Memoria:** `ChromaDB` guarda contexto a largo plazo.
-4. **TTS:** `Piper` genera las voces en milisegundos.
-5. **Orquestador:** `FastAPI` + WebSockets.
-6. **Frontend:** Vanilla JS / CSS.
+## 🤖 Créditos
+Este código fue co-creado por Tranzge en equipo con **Google Antigravity, ChatGPT, Gemini y Claude**. Un testamento de que hoy en día la visión importa más que saber memorizar sintaxis.
 
-> Creado con ❤️ por Tranzge. Si este proyecto te voló la cabeza, ¡déjale una estrellita ⭐!
+> Creado con ❤️ por Tranzge y las IAs. Si este proyecto te voló la cabeza, ¡déjale una estrellita ⭐!
