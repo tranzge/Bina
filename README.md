@@ -83,6 +83,14 @@ ACTIVE_PRESET = "jedi_sith" # Change this to rotate personalities
 
 ---
 
+## 🛠️ Modding, Customization & FAQ
+
+Want to change Bina's language to English? Want to unlock the Jedi/Sith mode? Need to troubleshoot a microphone issue?
+
+Check out the **[Modding & FAQ Guide](docs/MODDING_AND_FAQ.md)** for detailed instructions on how to customize Bina to your liking and understand her internal architecture.
+
+---
+
 ## 🤖 Acknowledgments
 
 This project is the result of a massive collaboration between human creativity and Artificial Intelligence. The architecture, logic, and code were heavily co-developed by Tranzge alongside **Google Antigravity, ChatGPT, Gemini, and Claude**. 

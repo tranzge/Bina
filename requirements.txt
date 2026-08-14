@@ -1,0 +1,9 @@
+fastapi
+uvicorn
+websockets
+ollama
+faster-whisper
+piper-tts
+requests
+pydantic
+soundfile

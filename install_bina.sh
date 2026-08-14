@@ -14,9 +14,9 @@ python3 -m venv venv
 source venv/bin/activate
 
 # 3. Instalar librerías de Python
-echo "[3/4] Instalando librerías requeridas (FastAPI, Whisper, Piper, etc)..."
+echo "[3/4] Instalando librerías desde requirements.txt..."
 pip install --upgrade pip
-pip install fastapi uvicorn websockets ollama faster-whisper piper-tts requests pydantic soundfile
+pip install -r requirements.txt
 
 echo "Descargando modelos de voz (Piper)..."
 mkdir -p models

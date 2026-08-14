@@ -3,6 +3,7 @@ venv/
 env/
 __pycache__/
 *.pyc
+commitments.json
 
 # Modelos pesados
 models/
